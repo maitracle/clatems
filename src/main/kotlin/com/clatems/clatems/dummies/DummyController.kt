@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/dummies")
 class DummyController(private val dummyService: DummyService) {
+    @GetMapping("/hello")
+    fun hello(): String {
+        return "Hello"
+    }
+
     @GetMapping
     fun getDummyList() = dummyService.findAll()
 

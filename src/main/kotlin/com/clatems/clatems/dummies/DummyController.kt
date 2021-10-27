@@ -1,11 +1,12 @@
 package com.clatems.clatems.dummies
 
+import org.modelmapper.ModelMapper
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/dummies")
-class DummyController(private val dummyService: DummyService) {
+class DummyController(private val dummyService: DummyService, private val modelMapper: ModelMapper) {
     @GetMapping("/hello")
     fun hello(): String {
         return "Hello"
@@ -20,10 +21,8 @@ class DummyController(private val dummyService: DummyService) {
             Dummy(stringField = body.stringField, numberField = body.numberField)
         )
 
-        println(1234)
-
         return ResponseEntity.ok(
-            RetrieveDummyDto(createdDummy.id, createdDummy.stringField, createdDummy.numberField)
+            modelMapper.map(createdDummy, RetrieveDummyDto::class.java)
         )
     }
 }

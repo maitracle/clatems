@@ -14,6 +14,9 @@ class DummyController(private val dummyService: DummyService, private val modelM
 
     @GetMapping
     fun getDummyList() = dummyService.findAll()
+        .stream().map { dummy ->
+            modelMapper.map(dummy, DummyResponseDto::class.java)
+        }
 
     @PostMapping
     fun createDummy(@RequestBody body: CreateDummyDto): ResponseEntity<DummyResponseDto> {

@@ -19,7 +19,7 @@ abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "serial")
-    var id: Long? = null
+    val id: Long? = null
 
     @CreatedDate
     @Column

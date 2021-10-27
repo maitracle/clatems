@@ -15,9 +15,15 @@ class DummyController(private val dummyService: DummyService) {
     fun getDummyList() = dummyService.findAll()
 
     @PostMapping
-    fun createDummy(@RequestBody body: CreateDummyDto): ResponseEntity<Dummy> {
-        val dummy = Dummy(stringField = body.stringField, numberField = body.numberField)
+    fun createDummy(@RequestBody body: CreateDummyDto): ResponseEntity<RetrieveDummyDto> {
+        val createdDummy = dummyService.save(
+            Dummy(stringField = body.stringField, numberField = body.numberField)
+        )
 
-        return ResponseEntity.ok(dummyService.save(dummy))
+        println(1234)
+
+        return ResponseEntity.ok(
+            RetrieveDummyDto(createdDummy.id, createdDummy.stringField, createdDummy.numberField)
+        )
     }
 }

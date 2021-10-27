@@ -16,13 +16,13 @@ class DummyController(private val dummyService: DummyService, private val modelM
     fun getDummyList() = dummyService.findAll()
 
     @PostMapping
-    fun createDummy(@RequestBody body: CreateDummyDto): ResponseEntity<RetrieveDummyDto> {
+    fun createDummy(@RequestBody body: CreateDummyDto): ResponseEntity<DummyResponseDto> {
         val createdDummy = dummyService.save(
             Dummy(stringField = body.stringField, numberField = body.numberField)
         )
 
         return ResponseEntity.ok(
-            modelMapper.map(createdDummy, RetrieveDummyDto::class.java)
+            modelMapper.map(createdDummy, DummyResponseDto::class.java)
         )
     }
 }

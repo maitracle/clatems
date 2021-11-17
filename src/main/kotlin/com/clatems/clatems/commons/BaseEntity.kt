@@ -15,12 +15,12 @@ import javax.persistence.*
     ], allowGetters = true
 )
 @EntityListeners(AuditingEntityListener::class)
-abstract class BaseEntity {
+abstract class BaseEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "serial")
-    val id: Long? = null
-
+    open val id: Long? = null
+) {
     @CreatedDate
     @Column
     val createdAt: LocalDateTime = LocalDateTime.now()

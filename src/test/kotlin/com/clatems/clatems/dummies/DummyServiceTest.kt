@@ -8,6 +8,7 @@ import org.mockito.Mockito.mock
 
 internal class DummyServiceTest {
     private val mockDummyRepository = mock(DummyRepository::class.java)
+    private val dummyService = DummyService(mockDummyRepository)
 
     @Test
     fun `should get dummy list`() {
@@ -17,7 +18,6 @@ internal class DummyServiceTest {
             Dummy(id = 3, stringField = "test string 3", numberField = 3)
         )
         `when`(mockDummyRepository.findAll()).thenReturn(expectedDummyList)
-        val dummyService = DummyService(mockDummyRepository)
 
         val actualDummyList = dummyService.findAll()
 
@@ -29,7 +29,6 @@ internal class DummyServiceTest {
         val idArgument: Long = 1
         val expectedDummy = Dummy(id = idArgument, stringField = "test string 1", numberField = 1)
         `when`(mockDummyRepository.getById(idArgument)).thenReturn(expectedDummy)
-        val dummyService = DummyService(mockDummyRepository)
 
         val retrievedDummy = dummyService.getById(idArgument)
 
@@ -41,7 +40,6 @@ internal class DummyServiceTest {
         val differentIdArgument: Long = 2
         val expectedDummy = null
         `when`(mockDummyRepository.getById(differentIdArgument)).thenReturn(expectedDummy)
-        val dummyService = DummyService(mockDummyRepository)
 
         val retrievedDummy = dummyService.getById(differentIdArgument)
 
@@ -62,7 +60,6 @@ internal class DummyServiceTest {
                 numberField = expectedNumberField
             )
         )
-        val dummyService = DummyService(mockDummyRepository)
 
         val createDummy = dummyService.save(createDummyArgument)
 

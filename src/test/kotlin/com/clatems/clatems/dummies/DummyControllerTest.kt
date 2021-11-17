@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
-import java.util.stream.Stream
 import kotlin.streams.toList
 
 internal class DummyControllerTest {
@@ -24,21 +23,26 @@ internal class DummyControllerTest {
 
     @Test
     fun `should get dummy list`() {
+        val expectedDummyCount = 3
         val serviceDummyResponse = listOf(
             Dummy(id = 1, stringField = "test string 1", numberField = 1),
             Dummy(id = 2, stringField = "test string 2", numberField = 2),
             Dummy(id = 3, stringField = "test string 3", numberField = 3)
         )
-        val expectedDummyList: Stream<DummyResponseDto> = serviceDummyResponse
+        val expectedDummyList = serviceDummyResponse
             .stream().map { dummy ->
                 modelMapper.map(dummy, DummyResponseDto::class.java)
-            }
+            }.toList()
 
         `when`(mockDummyService.findAll()).thenReturn(serviceDummyResponse)
 
-        val actualDummyList: Stream<DummyResponseDto> = dummyController.getDummyList()
+        val actual = dummyController.getDummyList()
 
-        expectedDummyList.toList().zip(actualDummyList.toList()).forEach { pair ->
+        val actualDummyList = actual.body!!.toList()
+
+        assertEquals(expectedDummyCount, actualDummyList.count())
+
+        expectedDummyList.zip(actualDummyList).forEach { pair ->
             assertEquals(pair.first, pair.second)
         }
     }

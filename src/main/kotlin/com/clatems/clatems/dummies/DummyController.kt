@@ -3,7 +3,6 @@ package com.clatems.clatems.dummies
 import org.modelmapper.ModelMapper
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.util.stream.Stream
 
 @RestController
 @RequestMapping("/dummies")
@@ -14,18 +13,12 @@ class DummyController(private val dummyService: DummyService, private val modelM
     }
 
     @GetMapping
-//    fun getDummyList(): ResponseEntity<Stream<DummyResponseDto>> {
-    fun getDummyList(): Stream<DummyResponseDto> {
-        val response = dummyService.findAll()
+    fun getDummyList() = ResponseEntity.ok(
+        dummyService.findAll()
             .stream().map { dummy ->
                 modelMapper.map(dummy, DummyResponseDto::class.java)
             }
-
-//        return ResponseEntity.ok(
-//            response
-//        )
-        return response
-    }
+    )
 
     @PostMapping
     fun createDummy(@RequestBody body: CreateDummyDto): ResponseEntity<DummyResponseDto> {

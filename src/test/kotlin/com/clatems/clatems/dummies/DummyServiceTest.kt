@@ -51,20 +51,14 @@ internal class DummyServiceTest {
         val expectedId: Long = 1
         val expectedStringField = "test string 1"
         val expectedNumberField = 1
-        val createDummyArgument = Dummy(stringField = expectedStringField, numberField = expectedNumberField)
+        val expectedDummy = Dummy(id = expectedId, stringField = expectedStringField, numberField = expectedNumberField)
 
-        `when`(mockDummyRepository.save(createDummyArgument)).thenReturn(
-            Dummy(
-                id = expectedId,
-                stringField = expectedStringField,
-                numberField = expectedNumberField
-            )
+        `when`(mockDummyRepository.save(expectedDummy)).thenReturn(
+            expectedDummy
         )
 
-        val createDummy = dummyService.save(createDummyArgument)
+        val createdDummy = dummyService.save(expectedDummy)
 
-        assertEquals(expectedId, createDummy.id)
-        assertEquals(expectedStringField, createDummy.stringField)
-        assertEquals(expectedNumberField, createDummy.numberField)
+        assertEquals(expectedDummy, createdDummy)
     }
 }

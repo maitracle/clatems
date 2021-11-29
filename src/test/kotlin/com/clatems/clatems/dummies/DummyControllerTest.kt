@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+import org.springframework.http.HttpStatus
 import kotlin.streams.toList
 
 internal class DummyControllerTest {
@@ -37,6 +38,8 @@ internal class DummyControllerTest {
         `when`(mockDummyService.findAll()).thenReturn(serviceDummyResponse)
 
         val actual = dummyController.getDummyList()
+
+        assertEquals(HttpStatus.OK, actual.statusCode)
 
         val actualDummyList = actual.body!!.toList()
 

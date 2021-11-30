@@ -1,5 +1,6 @@
 package com.clatems.clatems.dummies
 
+import com.clatems.clatems.commons.DtoConverter
 import com.clatems.clatems.commons.ModelMapperConfig
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -11,7 +12,8 @@ import kotlin.streams.toList
 internal class DummyControllerTest {
     private val mockDummyService = Mockito.mock(DummyService::class.java)
     private val modelMapper = ModelMapperConfig().modelMapper()
-    private val dummyController = DummyController(mockDummyService, modelMapper)
+    private val dtoConverter = DtoConverter<Dummy>(modelMapper)
+    private val dummyController = DummyController(mockDummyService, dtoConverter)
 
     @Test
     fun `should get Hello string`() {

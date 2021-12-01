@@ -37,13 +37,13 @@ internal class DummyServiceTest {
 
     @Test
     fun `should not get dummy with id when id is not existed`() {
-        val differentIdArgument: Long = 2
-        val expectedDummy = null
-        `when`(mockDummyRepository.getById(differentIdArgument)).thenReturn(expectedDummy)
+        val wrongIdArgument: Long = 2
+        val notFetchedDummy = null
+        `when`(mockDummyRepository.getById(wrongIdArgument)).thenReturn(notFetchedDummy)
 
-        val retrievedDummy = dummyService.getById(differentIdArgument)
+        val retrievedDummy = dummyService.getById(wrongIdArgument)
 
-        assertEquals(expectedDummy, retrievedDummy)
+        assertEquals(notFetchedDummy, retrievedDummy)
     }
 
     @Test

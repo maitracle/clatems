@@ -5,6 +5,7 @@ import javax.persistence.Entity
 
 @Entity
 class Dummy(
+    override val id: Long? = null,
     val stringField: String,
     val numberField: Number,
-) : BaseEntity() {}
+) : BaseEntity(id) {}

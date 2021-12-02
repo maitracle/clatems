@@ -27,17 +27,17 @@ internal class DummyControllerTest {
     @Test
     fun `should get dummy list`() {
         val expectedDummyCount = 3
-        val serviceDummyResponse = listOf(
+        val serviceDummyListResponse = listOf(
             Dummy(id = 1, stringField = "test string 1", numberField = 1),
             Dummy(id = 2, stringField = "test string 2", numberField = 2),
-            Dummy(id = 3, stringField = "test string 3", numberField = 3)
+            Dummy(id = 3, stringField = "test string 3", numberField = 3),
         )
-        val expectedDummyList = serviceDummyResponse
+        val expectedDummyList = serviceDummyListResponse
             .stream().map { dummy ->
                 modelMapper.map(dummy, DummyResponseDto::class.java)
             }.toList()
 
-        `when`(mockDummyService.findAll()).thenReturn(serviceDummyResponse)
+        `when`(mockDummyService.findAll()).thenReturn(serviceDummyListResponse)
 
         val actual = dummyController.getDummyList()
 

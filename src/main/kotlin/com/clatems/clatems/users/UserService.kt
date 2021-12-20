@@ -1,12 +1,30 @@
 package com.clatems.clatems.users
 
-import com.clatems.clatems.dummies.Dummy
-import com.clatems.clatems.dummies.DummyRepository
 import org.springframework.stereotype.Service
+import java.time.OffsetDateTime
 
 @Service
 class UserService(private val userRepository: UserRepository) {
-  fun save(user: User): User{
+
+  fun findAll() = userRepository.findAll()
+
+  fun saveUser(user: User): User {
     return userRepository.save(user)
+  }
+
+  fun getById(id: Long): User {
+    return this.userRepository.getById(id)
+  }
+
+
+  fun updateUser(id: Long, user: User) {
+    val target: User = getById(id)
+    target.email = user.email
+    target.password = user.password
+    userRepository.save(target)
+  }
+
+  fun deleteUser(id: Long) {
+    userRepository.deleteById(id)
   }
 }

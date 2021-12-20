@@ -1,16 +1,17 @@
 package com.clatems.clatems.users
 
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 class CreateUserDto(
-  val email: String,
-  val password: String,
-) {}
+  var email: String,
+  var password: String,
+){}
 
 class UserResponseDto {
   val id: Long? = null
-  val email: String = ""
-  val password: String = ""
+  var email: String = ""
+  var password: String = ""
   val createdAt: LocalDateTime? = null
   val updatedAt: LocalDateTime? = null
 }

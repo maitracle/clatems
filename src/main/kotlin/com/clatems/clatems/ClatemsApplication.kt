@@ -11,16 +11,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 class ClatemsApplication
 
 fun main(args: Array<String>) {
-    runApplication<ClatemsApplication>(*args)
+  runApplication<ClatemsApplication>(*args)
 }
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig : WebSecurityConfigurerAdapter() {
-    @Throws(Exception::class)
-    override fun configure(http: HttpSecurity) {
-        http.authorizeRequests()
-            .anyRequest().permitAll()
-            .and().csrf().disable()
-    }
+  @Throws(Exception::class)
+  override fun configure(http: HttpSecurity) {
+    http.authorizeRequests()
+      .anyRequest().permitAll()
+      .and().csrf().disable()
+  }
 }

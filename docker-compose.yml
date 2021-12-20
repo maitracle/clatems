@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  database:
+    image: postgres:11.4
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: spring
+    container_name: database
+
+  server-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: claterms-image
+    ports:
+      - "8080:8080"
+    container_name: claterms-image
+    restart: always
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/spring
+
+volumes:
+  postgres-data:

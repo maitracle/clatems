@@ -10,22 +10,22 @@ import javax.persistence.*
 
 @MappedSuperclass
 @JsonIgnoreProperties(
-  value = [
-    "createdAt, updatedAt"
-  ], allowGetters = true
+    value = [
+        "createdAt, updatedAt"
+    ], allowGetters = true
 )
 @EntityListeners(AuditingEntityListener::class)
 abstract class BaseEntity(
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(columnDefinition = "serial")
-  open val id: Long? = null
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "serial")
+    open val id: Long? = null
 ) {
-  @CreatedDate
-  @Column
-  val createdAt: LocalDateTime = LocalDateTime.now()
+    @CreatedDate
+    @Column
+    val createdAt: LocalDateTime = LocalDateTime.now()
 
-  @LastModifiedDate
-  @Column
-  val updatedAt: LocalDateTime = LocalDateTime.now()
+    @LastModifiedDate
+    @Column
+    val updatedAt: LocalDateTime = LocalDateTime.now()
 }

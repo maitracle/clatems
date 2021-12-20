@@ -16,7 +16,6 @@ class UserService(private val userRepository: UserRepository) {
         return this.userRepository.getById(id)
     }
 
-
     fun updateUser(id: Long, user: User) {
         val target: User = getById(id)
         target.email = user.email

@@ -1,7 +1,6 @@
 package com.clatems.clatems.users
 
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
 
 class CreateUserDto(
     var email: String,

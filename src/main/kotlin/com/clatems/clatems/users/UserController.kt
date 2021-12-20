@@ -5,15 +5,10 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-//@RequestMapping("/users")
+@RequestMapping("/users")
 class UserController(private val userService: UserService, private val modelMapper: ModelMapper) {
 
-    @GetMapping("/hello")
-    fun hello(): String {
-        return "Hello"
-    }
-
-    @GetMapping("users/all")
+    @GetMapping
     fun getUserList() = ResponseEntity.ok(
         userService.findAll()
             .stream().map { user ->
@@ -21,7 +16,7 @@ class UserController(private val userService: UserService, private val modelMapp
             }
     )
 
-    @PostMapping("/users")
+    @PostMapping
     fun createUser(@RequestBody body: CreateUserDto): ResponseEntity<UserResponseDto> {
         val newUser = userService.saveUser(
             User(email = body.email, password = body.password)
@@ -30,13 +25,13 @@ class UserController(private val userService: UserService, private val modelMapp
     }
 
 
-    @PutMapping("users/{id}")
+    @PutMapping("/{id}")
     fun updateUser(@PathVariable id: Long, @RequestBody user: User): ResponseEntity<Any> {
-        userService.updateUser(id, user)
-        return ResponseEntity.ok().body(true)
+        val updatedUser = userService.updateUser(id, user)
+        return ResponseEntity.ok(modelMapper.map(updatedUser, UserResponseDto::class.java))
     }
 
-    @DeleteMapping("users/{id}")
+    @DeleteMapping("/{id}")
     fun deleteUser(@PathVariable id: Long): ResponseEntity<Any> {
         userService.deleteUser((id))
         return ResponseEntity.ok().build()

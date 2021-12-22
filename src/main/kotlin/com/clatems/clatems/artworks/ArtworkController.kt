@@ -19,15 +19,13 @@ class ArtworkController(
     )
 
     @GetMapping(path = ["/{artworkId}"])
-    fun retrieveArtwork(@PathVariable("artworkId") artworkId: Long): ResponseEntity<Artwork> {
+    fun retrieveArtwork(@PathVariable("artworkId") artworkId: Long): ResponseEntity<ArtworkResponseDto> {
 
         val foundArtwork = artworkService.getById(artworkId)
-//            ?: return ResponseEntity.badRequest()
+            ?: return ResponseEntity.badRequest().build()
 
         return ResponseEntity.ok(
-            foundArtwork
-//          artworkService.getById(artworkId)
-//        dtoConverter.mapEntityToDto(artworkService.getById(artworkId), ArtworkResponseDto::class.java)
+            dtoConverter.mapEntityToDto(foundArtwork, ArtworkResponseDto::class.java)
         )
     }
 
@@ -43,10 +41,13 @@ class ArtworkController(
         )
     }
 
-    @PatchMapping(path=["/{artworkId}"])
-    fun updateArtwork(@PathVariable("artworkId") artworkId: Long, @RequestBody body: UpdateArtworkDto): ResponseEntity<ArtworkResponseDto> {
+    @PatchMapping(path = ["/{artworkId}"])
+    fun updateArtwork(
+        @PathVariable("artworkId") artworkId: Long,
+        @RequestBody body: UpdateArtworkDto
+    ): ResponseEntity<ArtworkResponseDto> {
         val updatedArtwork = artworkService.save(
-            Artwork(id=artworkId)
+            Artwork(id = artworkId)
         )
 
         return ResponseEntity.ok(
@@ -54,7 +55,7 @@ class ArtworkController(
         )
     }
 
-    @DeleteMapping(path=["/{artworkId}"])
+    @DeleteMapping(path = ["/{artworkId}"])
     fun deleteArtwork(@PathVariable("artworkId") artworkId: Long): ResponseEntity<Unit> {
         artworkService.deleteById(artworkId)
 

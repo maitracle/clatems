@@ -33,15 +33,4 @@ internal class DtoConverterTest {
             assertEquals(pair.first.id, pair.second.id)
         }
     }
-
-    @Test
-    fun `should raise exception when converto to wrong dto class`() {
-        class WrongDtoClass(val id: Long? = null, val anotherField: String)
-
-        val givenEntityList = listOf<SomeEntity>(SomeEntity(id=1), SomeEntity(id=2), SomeEntity(id=3))
-
-        assertThrows(MappingException::class.java) {
-            dtoConverter.mapEntityListToDtoList(givenEntityList, WrongDtoClass::class.java)
-        }
-    }
 }

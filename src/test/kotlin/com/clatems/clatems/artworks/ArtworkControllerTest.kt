@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import kotlin.streams.toList
 
+
 @SpringBootTest
 internal class ArtworkControllerTest(
     @Autowired private val artworkController: ArtworkController,
@@ -18,9 +19,9 @@ internal class ArtworkControllerTest(
         val expectedArtworkCount = 3
         val expectedArtworkList = artworkRepository.saveAll(
             listOf(
-                Artwork(id = 1),
-                Artwork(id = 2),
-                Artwork(id = 3),
+                Artwork(),
+                Artwork(),
+                Artwork(),
             )
         )
 
@@ -54,6 +55,18 @@ internal class ArtworkControllerTest(
 
     @Test
     fun `should not retrieve artwork with wrong artwork id`() {
+    }
+
+    @Test
+    fun `should create artwork`() {
+        val createArtworkParams = CreateArtworkDto()
+        val actual = artworkController.createArtwork(createArtworkParams)
+
+        Assertions.assertEquals(HttpStatus.CREATED, actual.statusCode)
+
+        val artworkResponse = actual.body!!
+        val createdArtwork = artworkRepository.getById(artworkResponse.id!!)
+        Assertions.assertEquals(createdArtwork.id, artworkResponse.id)
     }
 
     @Test

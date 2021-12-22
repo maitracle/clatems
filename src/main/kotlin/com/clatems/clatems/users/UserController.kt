@@ -1,19 +1,17 @@
 package com.clatems.clatems.users
 
-import org.modelmapper.ModelMapper
+import com.clatems.clatems.commons.DtoConverter
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/users")
-class UserController(private val userService: UserService, private val modelMapper: ModelMapper) {
+class UserController(private val userService: UserService, private val dtoConverter: DtoConverter<User>) {
 
     @GetMapping
     fun getUserList() = ResponseEntity.ok(
-        userService.findAll()
-            .stream().map { user ->
-                modelMapper.map(user, UserResponseDto::class.java)
-            }
+        dtoConverter.mapEntityListToDtoList(userService.findAll(), UserResponseDto::class.java)
+
     )
 
     @PostMapping
@@ -21,18 +19,22 @@ class UserController(private val userService: UserService, private val modelMapp
         val newUser = userService.saveUser(
             User(email = body.email, password = body.password)
         )
-        return ResponseEntity.ok(modelMapper.map(newUser, UserResponseDto::class.java))
+        return ResponseEntity.ok(
+            dtoConverter.mapEntityToDto(newUser, UserResponseDto::class.java)
+        )
     }
 
 
     @PutMapping("/{id}")
-    fun updateUser(@PathVariable id: Long, @RequestBody user: User): ResponseEntity<Any> {
+    fun updateUser(@PathVariable id: Long, @RequestBody user: User): ResponseEntity<UserResponseDto> {
         val updatedUser = userService.updateUser(id, user)
-        return ResponseEntity.ok(modelMapper.map(updatedUser, UserResponseDto::class.java))
+        return ResponseEntity.ok(
+            dtoConverter.mapEntityToDto(updatedUser, UserResponseDto::class.java)
+        )
     }
 
     @DeleteMapping("/{id}")
-    fun deleteUser(@PathVariable id: Long): ResponseEntity<Any> {
+    fun deleteUser(@PathVariable id: Long): ResponseEntity<Unit> {
         userService.deleteUser((id))
         return ResponseEntity.ok().build()
     }

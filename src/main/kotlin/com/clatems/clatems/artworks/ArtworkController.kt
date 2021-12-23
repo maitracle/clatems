@@ -1,16 +1,17 @@
 package com.clatems.clatems.artworks
 
 import com.clatems.clatems.commons.DtoConverter
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.net.URI
 
 
 @RestController
 @RequestMapping("/artworks")
 class ArtworkController(
     private val artworkService: ArtworkService,
-    private val dtoConverter: DtoConverter<Artwork>
+    private val dtoConverter: DtoConverter<Artwork>,
 ) {
 
     @GetMapping
@@ -24,9 +25,9 @@ class ArtworkController(
         val foundArtwork = artworkService.getById(artworkId)
             ?: return ResponseEntity.badRequest().build()
 
-        return ResponseEntity.ok(
-            dtoConverter.mapEntityToDto(foundArtwork, ArtworkResponseDto::class.java)
-        )
+        return ResponseEntity
+            .ok()
+            .body(dtoConverter.mapEntityToDto(foundArtwork, ArtworkResponseDto::class.java))
     }
 
     @PostMapping
@@ -35,10 +36,14 @@ class ArtworkController(
             Artwork()
         )
 
-        return ResponseEntity<ArtworkResponseDto>(
-            dtoConverter.mapEntityToDto(createdArtwork, ArtworkResponseDto::class.java),
-            HttpStatus.CREATED
-        )
+        val uri: URI = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{artworkId}")
+            .buildAndExpand(createdArtwork.id)
+            .toUri()
+
+        return ResponseEntity.created(uri)
+            .body(dtoConverter.mapEntityToDto(createdArtwork, ArtworkResponseDto::class.java))
     }
 
     @PatchMapping(path = ["/{artworkId}"])
@@ -59,9 +64,7 @@ class ArtworkController(
     fun deleteArtwork(@PathVariable("artworkId") artworkId: Long): ResponseEntity<Unit> {
         artworkService.deleteById(artworkId)
 
-        return ResponseEntity(
-            null,
-            HttpStatus.NO_CONTENT
-        )
+        return ResponseEntity.noContent()
+            .build()
     }
 }

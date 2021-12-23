@@ -1,7 +1,6 @@
 package com.clatems.clatems.users
 
 import org.springframework.stereotype.Service
-import java.time.OffsetDateTime
 
 @Service
 class UserService(private val userRepository: UserRepository) {
@@ -16,11 +15,11 @@ class UserService(private val userRepository: UserRepository) {
         return this.userRepository.getById(id)
     }
 
-    fun updateUser(id: Long, user: User) {
+    fun updateUser(id: Long, user: User): User {
         val target: User = getById(id)
         target.email = user.email
         target.password = user.password
-        userRepository.save(target)
+        return userRepository.save(target)
     }
 
     fun deleteUser(id: Long) {

@@ -1,12 +1,15 @@
 package com.clatems.clatems.dummies
 
-import org.modelmapper.ModelMapper
+import com.clatems.clatems.commons.DtoConverter
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/dummies")
-class DummyController(private val dummyService: DummyService, private val modelMapper: ModelMapper) {
+class DummyController(
+    private val dummyService: DummyService,
+    private val dtoConverter: DtoConverter<Dummy>
+) {
     @GetMapping("/hello")
     fun hello(): String {
         return "Hello"
@@ -14,10 +17,7 @@ class DummyController(private val dummyService: DummyService, private val modelM
 
     @GetMapping
     fun getDummyList() = ResponseEntity.ok(
-        dummyService.findAll()
-            .stream().map { dummy ->
-                modelMapper.map(dummy, DummyResponseDto::class.java)
-            }
+        dtoConverter.mapEntityListToDtoList(dummyService.findAll(), DummyResponseDto::class.java)
     )
 
     @PostMapping
@@ -27,7 +27,7 @@ class DummyController(private val dummyService: DummyService, private val modelM
         )
 
         return ResponseEntity.ok(
-            modelMapper.map(createdDummy, DummyResponseDto::class.java)
+            dtoConverter.mapEntityToDto(createdDummy, DummyResponseDto::class.java)
         )
     }
 }

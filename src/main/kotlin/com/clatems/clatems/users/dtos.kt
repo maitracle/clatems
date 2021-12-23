@@ -14,3 +14,4 @@ class UserResponseDto {
     val createdAt: LocalDateTime? = null
     val updatedAt: LocalDateTime? = null
 }
+

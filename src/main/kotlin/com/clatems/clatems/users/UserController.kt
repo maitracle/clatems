@@ -24,7 +24,6 @@ class UserController(private val userService: UserService, private val modelMapp
         return ResponseEntity.ok(modelMapper.map(newUser, UserResponseDto::class.java))
     }
 
-
     @PutMapping("/{id}")
     fun updateUser(@PathVariable id: Long, @RequestBody user: User): ResponseEntity<Any> {
         val updatedUser = userService.updateUser(id, user)

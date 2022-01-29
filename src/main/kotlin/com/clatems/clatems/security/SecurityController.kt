@@ -24,7 +24,7 @@ class SecurityController(
     fun login(@RequestBody loginRequestDto: LoginRequestDto): ResponseEntity<LoginResponseDto> {
         val target: User = userRepository.getById(loginRequestDto.id)
 
-        if (target.email == loginRequestDto.email && target.password == loginRequestDto.password) {
+        if (target.authenticate(loginRequestDto.email, loginRequestDto.password)) {
             return ResponseEntity
                 .ok()
                 .body(

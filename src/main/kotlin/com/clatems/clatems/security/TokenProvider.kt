@@ -1,18 +1,27 @@
 package com.clatems.clatems.security
 
+import com.clatems.clatems.users.UserService
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import lombok.RequiredArgsConstructor
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
 import java.security.Key
 import java.util.*
 import javax.crypto.spec.SecretKeySpec
+import javax.servlet.http.HttpServletRequest
 import javax.xml.bind.DatatypeConverter
 
 
 @RequiredArgsConstructor
 @Component
-class TokenProvider {
+class TokenProvider(
+    private val userService: UserService
+) {
+    private var secretKeyBytes: ByteArray
     private var signingKey: Key
 
     companion object {
@@ -29,6 +38,7 @@ class TokenProvider {
         val signatureAlgorithm: SignatureAlgorithm = SignatureAlgorithm.HS512
         val secretKeyBytes: ByteArray = DatatypeConverter.parseBase64Binary(SECRET_KEY)
         val signingKey: Key = SecretKeySpec(secretKeyBytes, signatureAlgorithm.jcaName)
+        this.secretKeyBytes = secretKeyBytes
         this.signingKey = signingKey
     }
 
@@ -43,5 +53,36 @@ class TokenProvider {
             .setExpiration(accessTokenExpiresIn)
             .signWith(signingKey, SignatureAlgorithm.HS512)
             .compact()
+    }
+
+    private fun getClames(token: String?): Jws<Claims> {
+        return Jwts.parserBuilder()
+            .setSigningKey(this.secretKeyBytes)
+            .build()
+            .parseClaimsJws(token)
+    }
+
+    fun resolveToken(req: HttpServletRequest): String? {
+        return req.getHeader("Authorization")
+    }
+
+    fun validateToken(token: String?): Boolean {
+        return try {
+            val clames: Jws<Claims> = getClames(token)
+            !clames.body.expiration.before(Date())
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun getUserPk(token: String?): Long? {
+        return getClames(token)
+            .body
+            .get(USER_PK) as Long?
+    }
+
+    fun getAuthentication(token: String?): Authentication {
+        val userDetails = userService.getById(getUserPk(token)!!.toLong())
+        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities )
     }
 }

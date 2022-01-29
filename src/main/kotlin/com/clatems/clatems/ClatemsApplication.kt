@@ -31,7 +31,7 @@ class SecurityConfig(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/security/login").permitAll()
+            .antMatchers("/security/login", "/security/signup").permitAll()
             .anyRequest().authenticated().and().cors()
             .and()
             .addFilterBefore(

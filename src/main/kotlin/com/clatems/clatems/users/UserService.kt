@@ -11,12 +11,14 @@ class UserService(private val userRepository: UserRepository) {
         return userRepository.save(user)
     }
 
-    fun getById(id: Long): User {
+    fun getById(id: Long): User? {
         return this.userRepository.getById(id)
     }
 
     fun updateUser(id: Long, user: User): User {
-        val target: User = getById(id)
+        val target = getById(id)
+            ?: throw Exception()
+
         target.email = user.email
         target.password = user.password
         return userRepository.save(target)

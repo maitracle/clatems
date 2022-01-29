@@ -16,9 +16,11 @@ class UserController(private val userService: UserService, private val dtoConver
 
     @PostMapping
     fun createUser(@RequestBody body: CreateUserDto): ResponseEntity<UserResponseDto> {
-        val newUser = userService.saveUser(
-            User(email = body.email, password = body.password)
-        )
+        var newUser = User(email = body.email)
+        newUser.password = body.password
+
+        newUser = userService.saveUser(newUser)
+
         return ResponseEntity.ok(
             dtoConverter.mapEntityToDto(newUser, UserResponseDto::class.java)
         )

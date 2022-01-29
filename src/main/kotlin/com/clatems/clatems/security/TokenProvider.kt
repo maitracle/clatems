@@ -64,6 +64,7 @@ class TokenProvider(
 
     fun resolveToken(req: HttpServletRequest): String? {
         return req.getHeader("Authorization")
+            ?.replace("$BEARER_TYPE ", "")
     }
 
     fun validateToken(token: String?): Boolean {
@@ -77,12 +78,13 @@ class TokenProvider(
 
     fun getUserPk(token: String?): Long? {
         return getClames(token)
-            .body
-            .get(USER_PK) as Long?
+            .body[USER_PK] as Long?
     }
 
     fun getAuthentication(token: String?): Authentication {
         val userDetails = userService.getById(getUserPk(token)!!.toLong())
-        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities )
+        userDetails ?: throw Exception("user is not exist.")
+
+        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
     }
 }

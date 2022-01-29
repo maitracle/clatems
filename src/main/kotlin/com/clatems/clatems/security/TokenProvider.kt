@@ -42,14 +42,14 @@ class TokenProvider(
         this.signingKey = signingKey
     }
 
-    fun generateToken(user: LoginRequestDto): String {
+    fun generateToken(userId: Long): String {
         val now: Long = Date().time
         val accessTokenExpiresIn = Date(now + ACCESS_TOKEN_EXPIRE_TIME)
         val subject = "access_token"
 
         return Jwts.builder()
             .setSubject(subject)
-            .claim(USER_PK, user.id)
+            .claim(USER_PK, userId)
             .setExpiration(accessTokenExpiresIn)
             .signWith(signingKey, SignatureAlgorithm.HS512)
             .compact()

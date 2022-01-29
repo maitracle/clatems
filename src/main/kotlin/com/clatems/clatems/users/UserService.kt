@@ -28,6 +28,15 @@ class UserService(private val userRepository: UserRepository) {
         userRepository.deleteById(id)
     }
 
+    fun signUp(email: String, password: String): User {
+        val user = User(
+            email = email
+        )
+        user.password = password
+
+        return this.saveUser(user)
+    }
+
     // Todo(harin): email을 가지고 user 가져오는 method 추가
 
 //    @Transactional(readOnly = true)

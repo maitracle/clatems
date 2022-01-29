@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  database:
+  claterms-database:
     image: postgres:11.4
     restart: always
     ports:
@@ -9,10 +9,10 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: spring
-    container_name: database
+      POSTGRES_USER: claterms-user
+      POSTGRES_PASSWORD: claterms-password
+      POSTGRES_DB: claterms
+    container_name: claterms-database
 
   server-app:
     build:
@@ -24,9 +24,9 @@ services:
     container_name: claterms-image
     restart: always
     depends_on:
-      - database
+      - claterms-database
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/spring
+      SPRING_DATASOURCE_URL: jdbc:postgresql://claterms-database:5432/claterms
 
 volumes:
   postgres-data:

@@ -1,10 +1,13 @@
 package com.clatems.clatems.artworks
 
 import com.clatems.clatems.commons.DtoConverter
+import com.clatems.clatems.users.User
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
+import javax.validation.Valid
 
 
 @RestController
@@ -31,9 +34,16 @@ class ArtworkController(
     }
 
     @PostMapping
-    fun createArtwork(@RequestBody body: CreateArtworkDto): ResponseEntity<ArtworkResponseDto> {
+    fun createArtwork(
+        @RequestBody @Valid body: CreateArtworkDto,
+        authentication: Authentication,
+    ): ResponseEntity<ArtworkResponseDto> {
         val createdArtwork = artworkService.save(
-            Artwork()
+            Artwork(
+                user = authentication.principal as User,
+                title = body.title,
+                description = body.description,
+            )
         )
 
         val uri: URI = ServletUriComponentsBuilder
@@ -46,19 +56,19 @@ class ArtworkController(
             .body(dtoConverter.mapEntityToDto(createdArtwork, ArtworkResponseDto::class.java))
     }
 
-    @PatchMapping(path = ["/{artworkId}"])
-    fun updateArtwork(
-        @PathVariable("artworkId") artworkId: Long,
-        @RequestBody body: UpdateArtworkDto
-    ): ResponseEntity<ArtworkResponseDto> {
-        val updatedArtwork = artworkService.save(
-            Artwork(id = artworkId)
-        )
-
-        return ResponseEntity.ok(
-            dtoConverter.mapEntityToDto(updatedArtwork, ArtworkResponseDto::class.java)
-        )
-    }
+   // @PatchMapping(path = ["/{artworkId}"])
+   // fun updateArtwork(
+   //     @PathVariable("artworkId") artworkId: Long,
+   //     @RequestBody body: UpdateArtworkDto
+   // ): ResponseEntity<ArtworkResponseDto> {
+   //     val updatedArtwork = artworkService.save(
+   //         Artwork(id = artworkId)
+   //     )
+   //
+   //     return ResponseEntity.ok(
+   //         dtoConverter.mapEntityToDto(updatedArtwork, ArtworkResponseDto::class.java)
+   //     )
+   // }
 
     @DeleteMapping(path = ["/{artworkId}"])
     fun deleteArtwork(@PathVariable("artworkId") artworkId: Long): ResponseEntity<Unit> {

@@ -7,9 +7,9 @@ class CreateUserDto(
     var password: String,
 ) {}
 
-class UserResponseDto {
-    val id: Long? = null
-    var email: String = ""
-    val createdAt: LocalDateTime? = null
-    val updatedAt: LocalDateTime? = null
-}
+class UserResponseDto(
+    val id: Long? = null,
+    var email: String = "",
+    val createdAt: LocalDateTime? = null,
+    val updatedAt: LocalDateTime? = null,
+) {}

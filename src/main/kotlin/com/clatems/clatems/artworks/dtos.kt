@@ -16,6 +16,7 @@ class ArtworkResponseDto(
     val user: UserResponseDto? = null,
     val title: String? = null,
     val description: String? = null,
+    val transactionHash: String? = null,
     val createdAt: LocalDateTime? = null,
     val updatedAt: LocalDateTime? = null,
 ) {}

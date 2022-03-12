@@ -1,6 +1,7 @@
 package com.clatems.clatems.artworks
 
 import com.clatems.clatems.commons.DtoConverter
+import com.clatems.clatems.klays.KlayService
 import com.clatems.clatems.users.User
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
@@ -15,6 +16,7 @@ import javax.validation.Valid
 class ArtworkController(
     private val artworkService: ArtworkService,
     private val dtoConverter: DtoConverter<Artwork>,
+    private val klayService: KlayService,
 ) {
 
     @GetMapping
@@ -46,6 +48,13 @@ class ArtworkController(
             )
         )
 
+        createdArtwork.id ?: return ResponseEntity.badRequest().build()
+
+        val transactionHash = klayService.mintToken("asdf", createdArtwork.id)
+        createdArtwork.transactionHash = transactionHash
+
+        artworkService.save(createdArtwork)
+
         val uri: URI = ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{artworkId}")
@@ -55,20 +64,6 @@ class ArtworkController(
         return ResponseEntity.created(uri)
             .body(dtoConverter.mapEntityToDto(createdArtwork, ArtworkResponseDto::class.java))
     }
-
-   // @PatchMapping(path = ["/{artworkId}"])
-   // fun updateArtwork(
-   //     @PathVariable("artworkId") artworkId: Long,
-   //     @RequestBody body: UpdateArtworkDto
-   // ): ResponseEntity<ArtworkResponseDto> {
-   //     val updatedArtwork = artworkService.save(
-   //         Artwork(id = artworkId)
-   //     )
-   //
-   //     return ResponseEntity.ok(
-   //         dtoConverter.mapEntityToDto(updatedArtwork, ArtworkResponseDto::class.java)
-   //     )
-   // }
 
     @DeleteMapping(path = ["/{artworkId}"])
     fun deleteArtwork(@PathVariable("artworkId") artworkId: Long): ResponseEntity<Unit> {

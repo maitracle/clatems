@@ -25,7 +25,8 @@ class SecurityController(
 
     @PostMapping("/login")
     fun login(@RequestBody loginRequestDto: LogInRequestDto): ResponseEntity<UserAndTokenResponseDto> {
-        val target: User = userRepository.getById(loginRequestDto.id)
+        val target: User = userRepository.getByEmail(loginRequestDto.email)
+            ?: return ResponseEntity(HttpStatus.NOT_FOUND)
 
         if (target.authenticate(loginRequestDto.email, loginRequestDto.password)) {
             return ResponseEntity

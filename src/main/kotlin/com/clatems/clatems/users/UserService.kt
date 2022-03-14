@@ -15,6 +15,10 @@ class UserService(private val userRepository: UserRepository) {
         return this.userRepository.getById(id)
     }
 
+    fun getByEmail(email: String): User? {
+        return this.userRepository.getByEmail(email)
+    }
+
     fun updateUser(id: Long, user: User): User {
         val target = getById(id)
             ?: throw Exception()
@@ -36,15 +40,4 @@ class UserService(private val userRepository: UserRepository) {
 
         return this.saveUser(user)
     }
-
-    // Todo(harin): email을 가지고 user 가져오는 method 추가
-
-//    @Transactional(readOnly = true)
-//    fun getUserInfo(email: String): User?{
-//        return userRepository.findByEmail(email)?: throw RuntimeException("유저 정보가 없습니다.")
-//    }
-
-//    fun getMyInfo(): Optional<User> {
-//        return userRepository.findById(SecurityUtil.getCurrentMemberId)?: throw RuntimeException("로그인 유저 정보가 없습니다.")
-//    }
 }

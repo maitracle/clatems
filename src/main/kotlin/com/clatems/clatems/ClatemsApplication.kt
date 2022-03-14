@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @SpringBootApplication
 class ClatemsApplication
@@ -21,12 +23,28 @@ fun main(args: Array<String>) {
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val tokenProvider: TokenProvider
+    private val tokenProvider: TokenProvider,
 ) : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
 
-        http.csrf().disable()
+        fun corsConfigurationSource(): UrlBasedCorsConfigurationSource {
+            val configuration = CorsConfiguration()
+
+            configuration.addAllowedOrigin("http://localhost:3000")
+            configuration.addAllowedHeader("*")
+            configuration.addAllowedMethod("*")
+            configuration.setAllowCredentials(true)
+
+            val source = UrlBasedCorsConfigurationSource()
+            source.registerCorsConfiguration("/**", configuration)
+
+            return source
+        }
+
+        http.cors().configurationSource(corsConfigurationSource())
+            .and()
+            .csrf().disable()
             .httpBasic().disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()

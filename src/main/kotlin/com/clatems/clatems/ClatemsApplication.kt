@@ -50,7 +50,7 @@ class SecurityConfig(
             .and()
             .authorizeRequests()
             .antMatchers("/security/login", "/security/signup").permitAll()
-            .anyRequest().authenticated().and().cors()
+            .anyRequest().authenticated()
             .and()
             .addFilterBefore(
                 AuthenticationFilter(tokenProvider),

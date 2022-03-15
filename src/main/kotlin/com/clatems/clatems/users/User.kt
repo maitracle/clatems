@@ -13,7 +13,7 @@ import javax.persistence.Table
 @Table(name = "application_user")
 class User(
     override val id: Long? = null,
-    var email: String,
+    @Column(unique = true) var email: String,
 ) : BaseEntity(id), UserDetails {
 
     @Column(name = "password")

@@ -2,6 +2,7 @@ package com.clatems.clatems.users
 
 import com.clatems.clatems.commons.DtoConverter
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -38,5 +39,13 @@ class UserController(private val userService: UserService, private val dtoConver
     fun deleteUser(@PathVariable id: Long): ResponseEntity<Unit> {
         userService.deleteUser((id))
         return ResponseEntity.ok().build()
+    }
+
+    @GetMapping("/my-profile")
+    fun fetchMyProfile(authentication: Authentication): ResponseEntity<UserResponseDto> {
+        val user = authentication.principal as User
+        return ResponseEntity.ok(
+            dtoConverter.mapEntityToDto(user, UserResponseDto::class.java)
+        )
     }
 }

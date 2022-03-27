@@ -5,7 +5,6 @@ import com.clatems.clatems.klays.KlayService
 import com.clatems.clatems.users.User
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
@@ -23,6 +22,14 @@ class ArtworkController(
     @GetMapping
     fun getArtworkList() = ResponseEntity.ok(
         dtoConverter.mapEntityListToDtoList(artworkService.findAll(), ArtworkResponseDto::class.java)
+    )
+
+    @GetMapping("/my")
+    fun getMyArtworkList(authentication: Authentication) = ResponseEntity.ok(
+        dtoConverter.mapEntityListToDtoList(
+            artworkService.findMyArtworks(authentication.principal as User),
+            ArtworkResponseDto::class.java
+        )
     )
 
     @GetMapping(path = ["/{artworkId}"])

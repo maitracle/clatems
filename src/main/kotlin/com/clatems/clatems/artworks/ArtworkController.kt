@@ -53,6 +53,8 @@ class ArtworkController(
                 user = authentication.principal as User,
                 title = body.title,
                 description = body.description,
+                authorName = body.authorName,
+                authorDescription = body.authorDescription,
                 metadataUrl = body.metadataUrl,
                 imageUrl = body.imageUrl,
             )

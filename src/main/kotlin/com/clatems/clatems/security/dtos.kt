@@ -4,7 +4,6 @@ import com.clatems.clatems.users.UserResponseDto
 
 
 class LogInRequestDto(
-    val id: Long,
     val email: String,
     val password: String,
 )

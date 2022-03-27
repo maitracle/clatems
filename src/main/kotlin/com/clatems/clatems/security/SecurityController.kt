@@ -34,7 +34,7 @@ class SecurityController(
                 .body(
                     UserAndTokenResponseDto(
                         user = dtoConverter.mapEntityToDto(target, UserResponseDto::class.java),
-                        token = tokenProvider.generateToken(loginRequestDto.id),
+                        token = tokenProvider.generateToken(target.id!!),
                     )
                 )
         }

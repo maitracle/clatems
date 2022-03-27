@@ -5,6 +5,7 @@ import com.clatems.clatems.klays.KlayService
 import com.clatems.clatems.users.User
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.net.URI
@@ -45,12 +46,14 @@ class ArtworkController(
                 user = authentication.principal as User,
                 title = body.title,
                 description = body.description,
+                metadataUrl = body.metadataUrl,
+                imageUrl = body.imageUrl,
             )
         )
 
         createdArtwork.id ?: return ResponseEntity.badRequest().build()
 
-        val transactionHash = klayService.mintToken("asdf", createdArtwork.id)
+        val transactionHash = klayService.mintToken(body.metadataUrl, createdArtwork.id)
         createdArtwork.transactionHash = transactionHash
 
         artworkService.save(createdArtwork)

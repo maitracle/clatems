@@ -11,5 +11,7 @@ class Artwork(
     @ManyToOne var user: User,
     var title: String,
     var description: String,
-    var transactionHash: String? = null,
+    var metadataUrl: String,
+    var imageUrl: String,
+    var transactionHash: String = "",
 ) : BaseEntity(id) {}

@@ -10,6 +10,8 @@ import xyz.groundx.caver_ext_kas.CaverExtKAS
 @Component
 class KlayService {
     private val caver: CaverExtKAS
+    private val CONTRACT_ALIAS = "my-first-kip17"
+    private val _CONTRACT_ALIAS = "clatems-contract"
 
     companion object {
         const val ACCESS_KEY = "KASKM4Q3XYN0D0PIEC7G52XG"
@@ -24,17 +26,14 @@ class KlayService {
     fun deployContract() {
         val name = "My First KIP-17"
         val symbol = "MFK"
-        val alias = "my-first-kip17"
-        this.caver.kas.kip17.deploy(name, symbol, alias)
+        this.caver.kas.kip17.deploy(name, symbol, this.CONTRACT_ALIAS)
     }
 
     fun mintToken(imageMetaUrl: String, artworkId: Long): String {
-        val contractAlias = "my-first-kip17"
-        val to = "0xc32c196a843125cdb462108f283bdfbaeb7602c1"
-        val id = "0x${artworkId}"
-        val uri = "https://link.to.your/token/metadata-0x1.json"
+        val clatemsWalletAddress = "0xc32c196a843125cdb462108f283bdfbaeb7602c1"
+        val id = "0x${artworkId + 99}"
 
-        val response = caver.kas.kip17.mint(contractAlias, to, id, uri)
+        val response = caver.kas.kip17.mint(this.CONTRACT_ALIAS, clatemsWalletAddress, id, imageMetaUrl)
 
         return response.transactionHash
     }

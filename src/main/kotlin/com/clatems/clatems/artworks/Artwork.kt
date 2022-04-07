@@ -11,6 +11,8 @@ class Artwork(
     @ManyToOne var user: User,
     var title: String,
     var description: String,
+    var authorName: String,
+    var authorDescription: String,
     var metadataUrl: String,
     var imageUrl: String,
     var transactionHash: String = "",

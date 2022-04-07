@@ -8,6 +8,8 @@ import javax.validation.constraints.NotBlank
 class CreateArtworkDto(
     @field:NotBlank val title: String = "",
     @field:NotBlank val description: String = "",
+    @field:NotBlank val authorName: String = "",
+    @field:NotBlank val authorDescription: String = "",
     @field:NotBlank val metadataUrl: String = "",
     @field:NotBlank val imageUrl: String = "",
 ) {}
@@ -18,6 +20,8 @@ class ArtworkResponseDto(
     val user: UserResponseDto? = null,
     val title: String = "",
     val description: String = "",
+    val authorName: String = "",
+    val authorDescription: String = "",
     val metadataUrl: String = "",
     val imageUrl: String = "",
     val transactionHash: String = "",

@@ -50,9 +50,9 @@ class SecurityConfig(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/security/login", "/security/signup").permitAll()
+            .antMatchers("/security/login", "/security/signup", "/chat").permitAll()
             .antMatchers(HttpMethod.GET, "/artworks").permitAll()
-            .anyRequest().authenticated()
+//            .anyRequest().authenticated()
             .and()
             .addFilterBefore(
                 AuthenticationFilter(tokenProvider),
